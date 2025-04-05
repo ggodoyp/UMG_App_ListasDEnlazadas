@@ -1,0 +1,99 @@
+﻿@page "/"
+@using App_ListasDEnlazadas.Services
+@using App_ListasDEnlazadas.Models
+
+<PageTitle>Insertar Antes De</PageTitle>
+
+<h1>Lista Doblemente Enlazada</h1>
+
+<div class="row">
+    <div class="col-md-3">
+        <label>Ingrese Nodo</label>
+        <input type="text" name="Valor" @bind-value="Valor" />
+        <label>Ingrese Dato X</label>
+        <input type="text" name="ValorAux" @bind-value="ValorAux" />
+
+    </div>
+    <div class="col-md-4 text-end">
+        <button class="btn btn-success mb-2" @onclick="AgregarInicio">Agregar nodo al inicio</button>
+        <button class="btn btn-outline-success mb-2" @onclick="InsertarAntesDe">Agregar nodo antes de X</button>
+        <button class="btn btn-outline-success mb-2" @onclick="InsertarDespuesDe">Agregar nodo despues de X</button>
+        <button class="btn btn-outline-danger mb-2" @onclick="LimpiarLista">Limpiar Lista</button>
+    </div>
+</div>
+
+<div>
+<ul>
+    @{
+        Nodo nodoTemporal = Lista.PrimerNodo;
+        while (nodoTemporal != null)
+        {
+            <li>@nodoTemporal.Informacion</li>
+            nodoTemporal = nodoTemporal.Siguiente;
+        }
+    }
+</ul>
+</div>
+<label class="text-success ">@mensaje</label>
+@code {
+    public string Valor { get; set; }
+    public string ValorAux { get; set; }
+    public Lista1_DatoX Lista { get; set; }
+    public string mensaje { get; set; }
+
+    protected override void OnInitialized()
+    {
+        Lista = new Lista1_DatoX();
+        base.OnInitialized();
+    }
+
+    public void LimpiarLista()
+    {
+        Lista.LimpiarLista();
+        mensaje = string.Empty;
+    }
+
+    public void AgregarInicio()
+    {
+        mensaje = Lista.AgregarAlInicio(CrearNodo());
+        Limpiar();
+    }
+
+    public void AgregarFinal()
+    {
+        Lista.AgregarAlFinal(CrearNodo());
+        Limpiar();
+    }     
+
+    public void InsertarAntesDe()
+    {
+        mensaje = Lista.AgregarAntesDeX(CrearNodo(), CrearNodoAux());
+        Limpiar();
+    }
+
+    public void InsertarDespuesDe()
+    {
+        mensaje = Lista.AgregarDespuesDeX(CrearNodo(), CrearNodoAux());
+        Limpiar();
+    }
+
+
+    public void Limpiar()
+    {
+        Valor = string.Empty;
+        ValorAux = string.Empty;
+    }
+
+    Nodo CrearNodo()
+    {
+        Nodo nuevoNodo = new Nodo(Valor);
+        return nuevoNodo;
+
+    }
+
+    Nodo CrearNodoAux()
+    {
+        Nodo auxNodo = new Nodo(ValorAux);
+        return auxNodo;
+    }
+}

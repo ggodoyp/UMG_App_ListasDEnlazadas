@@ -1,0 +1,93 @@
+﻿@page "/EliminarNodo"
+@using App_ListasDEnlazadas.Services
+@using App_ListasDEnlazadas.Models
+
+<PageTitle>Eliminación de nodo</PageTitle>
+
+<h1>Lista Doblemente Enlazada</h1>
+
+<div class="row">
+    <div class="col-md-3">
+        <label>Ingrese Nodo a eliminar</label>
+        <input type="text" name="Valor" @bind-value="Valor" />
+
+    </div>
+    <div class="col-md-6 text-end">
+        <button class="btn btn-success mb-2" @onclick="AgregarInicio">Agregar Lista</button>
+        <button class="btn btn-outline-success mb-2" @onclick="EliminarX">Eliminar Nodo</button>
+        <button class="btn btn-outline-success mb-2" @onclick="EliminarAndesDe">Eliminar nodo antes de X</button>
+        <button class="btn btn-outline-success mb-2" @onclick="EliminarDespuesDe">Eliminar nodo Despues de X</button>
+        <button class="btn btn-outline-danger mb-2" @onclick="LimpiarLista">Limpiar Lista</button>
+    </div>
+</div>
+
+<div>
+    <ul>
+        @{
+            Nodo nodoTemporal = Lista.PrimerNodo;
+            while (nodoTemporal != null)
+            {
+                <li>@nodoTemporal.Informacion</li>
+                nodoTemporal = nodoTemporal.Siguiente;
+            }
+        }
+    </ul>
+</div>
+<label class="text-success ">@mensaje</label>
+@code {
+    public string Valor { get; set; }
+    public string ValorAux { get; set; }
+    public Lista3_EliminarNodo Lista { get; set; }
+    public string mensaje { get; set; }
+
+    protected override void OnInitialized()
+    {
+        Lista = new Lista3_EliminarNodo();
+        base.OnInitialized();
+    }
+
+    public void LimpiarLista()
+    {
+        Lista.LimpiarLista();
+        mensaje = string.Empty;
+    }
+
+    public void AgregarInicio()
+    {
+        Lista.AgregarLista();
+        Limpiar();
+    }
+
+    public void EliminarX()
+    {
+        mensaje = Lista.EliminarNodoX(CrearNodo());
+        Limpiar();
+    }
+
+    public void EliminarAndesDe()
+    {
+        mensaje = Lista.EliminarAntesDeX(CrearNodo());
+        Limpiar();
+    }
+
+    public void EliminarDespuesDe()
+    {
+        mensaje = Lista.EliminarDespuesDeX(CrearNodo());
+        Limpiar();
+    }
+
+    public void Limpiar()
+    {
+        Valor = string.Empty;
+        ValorAux = string.Empty;
+    }
+
+    Nodo CrearNodo()
+    {
+        Nodo nuevoNodo = new Nodo(Valor);
+        return nuevoNodo;
+
+    }
+
+}
+
